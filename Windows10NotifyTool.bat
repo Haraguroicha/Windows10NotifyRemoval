@@ -85,12 +85,12 @@ if not exist "%~dp0downloadFile.ps1" (
   powershell -ExecutionPolicy Unrestricted -Command "& { (New-Object System.Net.WebClient).DownloadFile('%ps_download_file%','%~dp0downloadFile.ps1') }"
 )
 set no_recovery=0
-set recovery_flag=R
-set recovery_message=按 R 還原更新與取得恢復方式，
+set recovery_flag= R
+set recovery_message= 按 R 還原更新與取得恢復方式，
 
 set no_removal=0
-set removal_flag=Y
-set removal_message=按 Y 開始移除與防護，
+set removal_flag= Y
+set removal_message= 按 Y 開始移除與防護，
 
 if "%1"=="/force" goto ignoreCheck
 
@@ -115,9 +115,8 @@ if %errorlevel%==1 (
 :ignoreCheck
 echo.
 
-set choice_items=%removal_flag%%recovery_flag%N
-set choice_message="%removal_message%%recovery_message%按 N 取消操作"
-
+set choice_items=%removal_flag:~1%%recovery_flag:~1%N
+set choice_message="%removal_message:~1%%recovery_message:~1%按 N 取消操作"
 CHOICE /C %choice_items% /M %choice_message%
 set selected=%errorlevel%
 set /a selected=%selected%+%no_removal%+%no_recovery%
