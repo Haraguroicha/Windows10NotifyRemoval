@@ -1,5 +1,14 @@
 @if (1==1) @if(1==0) @ELSE
 @echo off&SETLOCAL ENABLEEXTENSIONS
+if "%~d0"=="\\" goto wrapUNC
+goto init
+
+:wrapUNC
+copy %0 "%temp%\%~nx0" >nul 1>nul 2>nul
+call "%temp%\%~nx0" %*
+goto _EOF
+
+:init
 cls
 title 移除 Windows 10 更新通知程式
 echo =============================================
@@ -67,6 +76,13 @@ ping localhost -n 30 > nul
 goto exit
 
 :START
+set ps_download_file="https://raw.githubusercontent.com/Haraguroicha/Windows10NotifyRemoval/master/downloadFile.ps1"
+set removePS1=0
+if not exist "%~dp0downloadFile.ps1" (
+  set removePS1=1
+  echo 準備檔案中...
+  powershell -ExecutionPolicy Unrestricted -Command "& { (New-Object System.Net.WebClient).DownloadFile('%ps_download_file%','%~dp0downloadFile.ps1') }"
+)
 set no_recovery=0
 set recovery_flag=R
 set recovery_message=按 R 還原更新與取得恢復方式，
@@ -132,7 +148,7 @@ rmdir GWX >nul 1>nul 2>nul
 echo 移除完成!!
 echo.
 echo 正在重新下載 KB3035583 更新檔案中...
-powershell -ExecutionPolicy Unrestricted -File "%~dp0\downloadFile.ps1" %msu_url% "%temp%\KB3035583.msu"
+powershell -ExecutionPolicy Unrestricted -File "%~dp0downloadFile.ps1" %msu_url% "%temp%\KB3035583.msu"
 if exist "%temp%\KB3035583.msu" (
   echo 下載完成!
   goto installKB
@@ -174,9 +190,10 @@ echo =============================================
 echo.
 
 :_EOF
+if %removePS1%==1 del "%~dp0downloadFile.ps1" >nul 1>nul 2>nul
 echo 感謝您的使用!!
 echo 請按任意鍵即可關閉視窗
-pause > nul
+del "%temp%\%~nx0" >nul 1>nul 2>nul & pause > nul
 
 @goto :EOF
 @end @ELSE
