@@ -117,7 +117,7 @@ echo.
 
 set choice_items=%removal_flag:~1%%recovery_flag:~1%N
 set choice_message="%removal_message:~1%%recovery_message:~1%«ö N ¨ú®ø¾Þ§@"
-CHOICE /N /C %choice_items% /M %choice_message%hoice
+CHOICE /N /C %choice_items% /M %choice_message%
 set /a selected=%errorlevel%-1
 call set selected_item=%^choice_items:~%selected%,1%
 if "%selected_item%"=="Y" GOTO yes
