@@ -76,6 +76,7 @@ ping localhost -n 30 > nul
 goto exit
 
 :START
+set path=%path%;%windir%\System32\wbem
 set ps_download_file="https://raw.githubusercontent.com/Haraguroicha/Windows10NotifyRemoval/master/downloadFile.ps1"
 set removePS1=0
 if not exist "%~dp0downloadFile.ps1" (
