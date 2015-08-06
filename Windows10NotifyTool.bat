@@ -1,5 +1,6 @@
 @if (1==1) @if(1==0) @ELSE
 @echo off&SETLOCAL ENABLEEXTENSIONS
+path %path%;%windir%\System32\WindowsPowerShell\v1.0;%windir%\System32\wbem
 if "%~d0"=="\\" goto wrapUNC
 goto init
 
@@ -76,7 +77,6 @@ ping localhost -n 30 > nul
 goto exit
 
 :START
-path %path%;%windir%\System32\WindowsPowerShell\v1.0;%windir%\System32\wbem
 set ps_download_file="https://raw.githubusercontent.com/Haraguroicha/Windows10NotifyRemoval/master/downloadFile.ps1"
 set removePS1=0
 if not exist "%~dp0downloadFile.ps1" (
